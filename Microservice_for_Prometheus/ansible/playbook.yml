@@ -1,0 +1,9 @@
+---
+- name: Deploy Microservice to AlmaLinux
+  hosts: almalinux
+  become: yes
+  gather_facts: yes
+
+  roles:
+    - microservice
+...
