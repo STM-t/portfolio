@@ -1,0 +1,34 @@
+
+---
+
+- name: Test that target directory exists
+  file:
+    path: "/opt/microservice"
+    state: directory
+    mode: '0755'
+
+- name: Copy main.py
+  copy:
+    src: "main.py"
+    dest: "/opt/microservice/main.py"
+
+- name: Copy requirements.txt
+  copy:
+    src: "requirements.txt"
+    dest: "/opt/microservice/requirements.txt"
+
+- name: Copy Dockerfile
+  copy:
+    src: "Dockerfile"
+    dest: "/opt/microservice/Dockerfile"
+
+- name: Copy start_microservice.sh
+  copy:
+    src: "start_microservice.sh"
+    dest: "/opt/microservice/start_microservice.sh"
+    mode: '0755'
+
+- name: Start Docker setup tasks
+  include_tasks: docker-setup.yml
+
+...
