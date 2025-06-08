@@ -1,0 +1,35 @@
+
+---
+
+- name: Testing that Docker is running
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Build Docker image
+  command: docker build -t microservice /opt/microservice
+  args:
+    removes: "/opt/microservice/Dockerfile"
+
+- name: Verify Docker image exists
+  command: docker images -q microservice
+  register: image_check
+  ignore_errors: yes
+  changed_when: false
+
+- name: Debug image check
+  debug:
+    var: image_check.stdout
+
+- name: Run microservice container
+  command: |
+    docker run -d \
+      --name microservice \
+      -p 8080:8080 \
+      -v /opt/microservice:/app \
+      --restart unless-stopped \
+      microservice
+  when: image_check.stdout != ""
+
+...
